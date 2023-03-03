@@ -4,8 +4,8 @@ using Kay;
 
 string[] banner = new string[]
 {
-    "Hi, I am **Kay** (a prototype) Joy-like programming language.",
-    "You can find me information about me at [Kath](https://github.com/basp/kay).",
+    "Hi, I am **Kay**, a programming language full of **Joy**.",
+    "You can find more information about me at [Kay](https://github.com/basp/kay).",
     "Go wild and have fun! <3",
     string.Empty,
 };

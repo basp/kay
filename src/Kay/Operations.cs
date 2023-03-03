@@ -148,6 +148,16 @@ public static class Operations
         i.Push(cons);
     }
 
+    public static void Reverse(Interpreter i)
+    {
+        new Validator("reverse")
+            .OneArgument()
+            .ListOnTop()
+            .Validate(i.Stack);
+        var xs = i.Pop<Node.List>();
+        i.Push(new Node.List(xs.Elements.Reverse()));
+    }
+
     public static void Ifte(Interpreter i)
     {
         Validators.IfteValidator.Validate(i.Stack);
@@ -200,6 +210,13 @@ public static class Operations
         Validators.RestValidator.Validate(i.Stack);
         var xs = i.Pop<IAggregate>();
         i.Push(xs.Rest());
+    }
+
+    public static void Reset(Interpreter i)
+    {
+        i.Stack = new C5.ArrayList<INode>();
+        i.Queue = new C5.ArrayList<Node.List>();
+        
     }
 
     public static void Clear(Interpreter i)

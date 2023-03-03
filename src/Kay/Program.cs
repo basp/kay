@@ -4,7 +4,7 @@ using Kay;
 
 string[] banner = new string[]
 {
-    "Hi, I am **Kay**, a programming language full of **Joy**.",
+    "Hi, I am **Kay**. I'm a programming language full of **Joy**.",
     "You can find more information about me at [Kay](https://github.com/basp/kay).",
     "Go wild and have fun! <3",
     string.Empty,
@@ -48,7 +48,6 @@ while (true)
         Console.Write(string.Empty.PadRight(prompt.Length));
     }
 
-
     var stream = new AntlrInputStream(buf.ToString());
     var lexer = new KayLexer(stream);
     var tokens = new CommonTokenStream(lexer);
@@ -56,11 +55,8 @@ while (true)
 
     Console.WriteLine();
 
-    try
+    void PrintStack(C5.IStack<INode> stack)
     {
-        var ctx = parser.cycle();
-        var stack = ctx.Accept(visitor);
-
         for (var i = stack.Count - 1; i >= 0; i--)
         {
             var pointer = "";
@@ -80,6 +76,14 @@ while (true)
             Console.WriteLine();
         }
     }
+
+    C5.IStack<INode>? stack = new C5.ArrayList<INode>(1024);
+
+    try
+    {
+        var ctx = parser.cycle();
+        stack = ctx.Accept(visitor);
+    }
     catch (RuntimeException ex)
     {
         // These are generally thrown when stack validation
@@ -95,5 +99,12 @@ while (true)
         // insufficient stack validation or an bug in the 
         // interpreter.
         Console.WriteLine(ex.ToString());
+    }
+    finally
+    {
+        if (stack != null)
+        {
+            PrintStack(stack);
+        }
     }
 }

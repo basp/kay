@@ -52,19 +52,20 @@ public class Interpreter : Dictionary<string, Entry>
         this["body"] = new Entry(Operations.Body);
         this["user"] = new Entry(Operations.User);
         this["times"] = new Entry(Operations.Times);
+        this["reverse"] = new Entry(Operations.Reverse);
     }
 
     /// <summary>
     /// Gets or sets the interpreter stack.
     /// </summary>
     public C5.ArrayList<INode> Stack { get; set; } =
-        new C5.ArrayList<INode>();
+        new C5.ArrayList<INode>(1024);
 
     /// <summary>
     /// Gets or sets the interpreter queue.
     /// </summary>
     public C5.ArrayList<Node.List> Queue { get; set; } =
-        new C5.ArrayList<Node.List>();
+        new C5.ArrayList<Node.List>(1024);
 
     /// <summary>
     /// Adds a new runtime definition to the interpreter environment.

@@ -4,7 +4,7 @@
 It is named after [Kathleen Rita Antonelli](https://en.wikipedia.org/wiki/Kathleen_Antonelli). She was one of the six original programmers of the [ENIAC](https://en.wikipedia.org/wiki/ENIAC) and known as **Kay McNulty**, an Irish-born American computer programmer. It is also a firm nod to [Alan Kay](https://en.wikipedia.org/wiki/Alan_Kay) who - even though I never had to fortune to meet him - changed my professional life.
 
 ## disclaimer
-Kay is just a toy (for now). Unless you are absolutely crazy you really should not use this for any kind of serious stuff. It meant like a vehicle to learn about and experiment with some of the ideas that **Manfred von Thun** was having fun with when he designed **Joy**.
+Kay is just a toy (for now). Unless you are absolutely crazy you really should not use this for any kind of serious stuff. It is meant like a vehicle to learn about and experiment with some of the ideas that **Manfred von Thun** was having fun with when he designed **Joy**.
 
 ## introduction
 Kay is capable of some pretty weird things. Let's show off the most useless program ever. This doesn't calculate anything useful but it shows off some of her symbolic computation capabilities and the crazy ways you can manipulate the interpreter.
@@ -25,7 +25,12 @@ Indeed she does not like this formulation.
 
 No sane programming language would accept this though so it is a good thing Kay does not either.
 
-However, we are not defeated yet. Since we have `intern` which converts a string to a symbol, **quotations** which are basically lists that act like a program and `def` which takes two items from the stack and converts them into a *user-defined* definition we can continue. Lets force our way:
+However, we are not defeated yet. Since we have the following:
+* `intern` which converts a string to a symbol
+* **quotations** which are basically lists that act like a program
+* `def` which takes two items from the stack and converts them into a *user-defined* definition.
+
+Lets force our way:
 ```
 kay> "2 * (3 + 4)" intern. // 1
 

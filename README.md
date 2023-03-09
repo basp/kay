@@ -53,7 +53,7 @@ kay> intern.
 2 * (3 + 4) <- top
 ```
 
-So now that we are sure we can use this crazy symbol name we can push the body:
+So now that we are sure we can use this insane symbol name we can push the body:
 ```
 kay> [4 3 + 2 *].          // 2
 
@@ -61,7 +61,7 @@ kay> [4 3 + 2 *].          // 2
 2 * (3 + 4)
 ```
 
-We now have two things on the stack, our (crazy) symbol name `2 * (3 + 4)` and a quotation that represents the body for that symbol. Is the body even correct? Does it correctly evaluate the expression `2 * (3 + 4)`? This should evaluate to `14` but we haven't really bothered to check. Let's do that right now using the `x` combinator. This will evaluate the program on top op the stack without removing it.
+We now have two things on the stack, our symbol name `2 * (3 + 4)` and a quotation that represents the body for that symbol. Is the body even correct? Does it correctly evaluate the expression `2 * (3 + 4)`? This should evaluate to `14` but we haven't really bothered to check. Let's do that right now using the `x` combinator. This will evaluate the program on top op the stack without removing it.
 ```
 kay> x.
 
@@ -70,7 +70,9 @@ kay> x.
 2 * (3 + 4)
 ```
 
-It correctly evaluates to `14` so it seems the body for our defintion is fine. However we now have this `14` sitting on top of the stack which we need to remove otherwise we cannot invoke the `def` operation which expects a quotation on top and a symbol below. But since we are here we just go ahead and issue a `def` anyway to see what happens:
+It correctly evaluates to `14` so it seems the body for our defintion is fine. However we now have this `14` sitting on top of the stack which we need to remove otherwise we cannot invoke the `def` operation which expects a quotation on top and a symbol below. 
+
+But since we are here to learn we just go ahead and issue a `def` anyway. Just to see what happens:
 ```
 kay> def.
 

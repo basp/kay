@@ -363,6 +363,18 @@ public static class Operations
         }
     }
 
+    public static void Redef(Interpreter i)
+    {
+        new Validator("redef")
+            .TwoArguments()
+            .OneQuote()
+            .SymbolAsSecond()
+            .Validate(i.Stack);
+        var q = i.Pop<Node.List>();
+        var n = i.Pop<Node.Symbol>();
+        i.Redefine(n.Name, q.Elements);
+    }
+
     public static void Undef(Interpreter i)
     {
         Validators.UndefValidator.Validate(i.Stack);
@@ -638,7 +650,7 @@ public static class Operations
             {
                 buf.AppendLine(c.Key.Name);
                 buf.AppendLine("".PadLeft(80, '-'));
-                foreach(var t in c)
+                foreach (var t in c)
                 {
                     buf.Append(t.Id.PadRight(padding));
                     buf.Append(" : ");
@@ -692,6 +704,11 @@ public static class Operations
         }
 
         Console.WriteLine(buf.ToString());
+    }
+
+    public static void Quit(Interpreter i)
+    {
+        Environment.Exit(0);
     }
 
     private static void BinaryLogic(

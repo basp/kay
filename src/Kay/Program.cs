@@ -5,9 +5,9 @@ using Kay;
 string[] banner = new string[]
 {
     "Hi, I am Kay!",
-    "You can type `help.' to see what I can do for you.",
-    "Have fun!",
-    "<3",
+    "You can type \"help.\" (without the quotes you silly) to get",
+    "an overview of the things I can do.",
+    "Have fun! <3",
     string.Empty,
 };
 
@@ -15,7 +15,7 @@ const char dot = '.';
 const string prompt = "kay> ";
 const int pointerOffset = 12;
 
-var interpreter = new Interpreter();
+var interpreter = new INX();
 var visitor = new CycleVisitor(interpreter);
 
 Console.WriteLine(string.Join(Environment.NewLine, banner));

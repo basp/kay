@@ -9,6 +9,8 @@ Kay is just a toy (for now). Unless you are absolutely crazy you really should n
 ## introduction
 Kay is capable of some pretty weird things. Let's show off the most useless program ever. This doesn't calculate anything useful but it shows off some of her symbolic computation capabilities and the crazy ways you can manipulate the interpreter.
 
+> If you feel like this introduction is going way too fast then do not worry. It is just meant to give you a glimpse of what Kay can do, a proper tutorial and manual are in the works.
+
 We'll try to define the symbol `2 * (3 + 4)` just because we are mad. Note that this name has spaces in it so its extremely unlikely the following will work:
 ```
 kay> 2 * (3 + 4) == 4 3 + 2 *.
@@ -174,6 +176,9 @@ Here we use `unit` to convert the symbol into a *quotation* which we then evalua
 
 If we evaluate the trace we can see that even though `unit` is theoretically a bit cleaner, in practice using `body` requires less instructions to be queued. This is caused by `body` directly putting the term associated with symbol `2 * (3 + 4)` on the stack while the `unit` construction causes the term associated with the symbol `2 * (3 + 4)` to be prepended onto the queue.
 
+## manual
+Coming soon!
+
 ## dynamic defs
 Dynamic definitions is a feature that Joy does not have. In Joy you can have static definitions which you can duplicate and change if you want but you cannot undefine and redefine definitions dynamically - they are baked in at read time. In Kay, built-in definitions cannot be changed but all user-definitions can be defined and undefined at runtime using `def` and `undef` with operands on the stack like any other operation.
 
@@ -266,8 +271,8 @@ kay> "A" intern user.
 false       <- top
 ```
 
-## examples
-Below are just some samples of what kind of symbolics you can do with Kay.
+## reference examples
+Below are just some reference samples showing off some basic symbolics you can do with Kay.
 
 ```
 kay> S == dup *

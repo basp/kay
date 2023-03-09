@@ -6,7 +6,7 @@ public class Tracer : List<(INode[], INode[])>
 {
     public static string Separator { get; set; } = " : ";
 
-    public static int ColumnWidth { get; set; } = 120;
+    public static int MaxColumnWidth { get; set; } = 120;
 
     public override string ToString() => TraceToString(this);
 
@@ -19,7 +19,6 @@ public class Tracer : List<(INode[], INode[])>
 
     private static string TraceToString(List<(INode[], INode[])> history)
     {
-        var buf = new StringBuilder();
         var lines = history
             .Select(x => new
             {
@@ -30,40 +29,46 @@ public class Tracer : List<(INode[], INode[])>
                     ' ',
                     x.Item2.Select(x => x.ToRepresentation())),
             })
+            .Prepend(new
+            {
+                Stack = "stack",
+                Queue = "queue",
+            })
             .Select(x => new
             {
-                Stack = x.Stack.Length > ColumnWidth
+                Stack = x.Stack.Length > MaxColumnWidth
                     ? string.Concat(
                         "... ",
-                        x.Stack.Substring(x.Stack.Length - ColumnWidth, ColumnWidth))
+                        x.Stack.Substring(x.Stack.Length - MaxColumnWidth, MaxColumnWidth))
                     : x.Stack,
-                Queue = x.Queue.Length > ColumnWidth
+                Queue = x.Queue.Length > MaxColumnWidth
                     ? string.Concat(
-                        x.Queue.Substring(0, ColumnWidth),
+                        x.Queue.Substring(0, MaxColumnWidth),
                         " ...")
                     : x.Queue,
             });
 
         var padding = lines.Max(x => x.Stack.Length);
         var max = lines.Max(x => padding + Separator.Length + x.Queue.Length);
-        var header = "".PadRight(max, '=');
-        var spacer = "".PadRight(max, '-');
+        var h1 = "".PadRight(max, '=');
+        var h2 = "".PadRight(max, '-');
+        var caption = lines.First();
+        var trace = lines.Skip(1);
 
-        buf.AppendLine(header);
-        buf.Append("stack".PadLeft(padding));
-        buf.Append(Separator);
-        buf.Append("queue");
-        buf.AppendLine();
-        buf.AppendLine(spacer);
-        foreach (var t in lines)
+        var buf = new StringBuilder();
+
+        void AppendLine(string stack, string queue)
         {
-            buf.Append(t.Stack.PadLeft(padding));
+            buf!.Append(stack.PadLeft(padding));
             buf.Append(Separator);
-            buf.Append(t.Queue);
-            buf.AppendLine();
+            buf.AppendLine(queue);
         }
 
-        buf.AppendLine(spacer);
+        buf.AppendLine(h1);
+        AppendLine(caption.Stack, caption.Queue);
+        buf.AppendLine(h2);
+        Array.ForEach(trace.ToArray(), t => AppendLine(t.Stack, t.Queue));
+        buf.AppendLine(h2);
         return buf.ToString();
     }
 }

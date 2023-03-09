@@ -38,10 +38,18 @@ public class Entry
     /// </summary>
     public Action<Interpreter> Action { get; }
 
+    public Category Category { get; set; } = Category.Unknown;
+
     /// <summary>
-    /// Gets a string describing the stack effect when this entry is executed.
+    /// Gets or sets a string describing the stack effect when this entry is 
+    /// executed.
     /// </summary>
-    public string Effect { get; }
+    public string? Effect { get; set; }
+
+    /// <summary>
+    /// Gets or sets a help string for this entry.
+    /// </summary>
+    public string[] Help { get; set; } = Array.Empty<string>();
 
     /// <summary>
     /// Gets the <see cref="INode"/> instances that are the body of this entry.

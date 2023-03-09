@@ -1,5 +1,7 @@
 namespace Kay;
 
+using System.Text;
+
 /// <summary>
 /// This class contains definitions for all kinds of operations
 /// and combinators that can be used to bootstrap an interpreter
@@ -216,7 +218,7 @@ public static class Operations
     {
         i.Stack = new C5.ArrayList<INode>();
         i.Queue = new C5.ArrayList<Node.List>();
-        
+
     }
 
     public static void Clear(Interpreter i)
@@ -409,6 +411,11 @@ public static class Operations
     public static void Char(Interpreter i) =>
         TypeCheck(i, "char", Operand.Char);
 
+
+    /// <summary>
+    /// logical      :  X  ->  B
+    /// Tests whether X is a logical.
+    /// </summary>
     public static void Logical(Interpreter i) =>
         TypeCheck(i, "logical", Operand.Boolean);
 
@@ -533,7 +540,7 @@ public static class Operations
     {
         Validators.TraceValidator.Validate(i.Stack);
 
-        Tracer.ColumnWidth = 40;
+        Tracer.MaxColumnWidth = 40;
 
         var history = new Tracer();
         var saved = i.Queue;
@@ -579,6 +586,112 @@ public static class Operations
         i.Queue = saved;
 
         Console.WriteLine(history.ToString());
+    }
+
+    public static void Help(Interpreter i)
+    {
+        var defs = i
+            .Where(x => x.Value.IsUserDefined)
+            .Select(x => new
+            {
+                Id = x.Key,
+                Body = string.Join(
+                    " ",
+                    x.Value.Body.Select(y => y.ToRepresentation())),
+            });
+
+        var builtins = i
+            .Where(x => !x.Value.IsUserDefined)
+            .Select(x => new
+            {
+                Id = x.Key,
+                Effect = x.Value.Effect,
+                Help = x.Value.Help,
+                Category = x.Value.Category,
+            });
+
+        var buf = new StringBuilder();
+        int padding;
+
+        if (defs.Any())
+        {
+            padding = defs.Max(x => x.Id.Length);
+            foreach (var t in defs.OrderBy(x => x.Id))
+            {
+                buf.Append(t.Id.PadLeft(padding));
+                buf.Append(" == ");
+                buf.AppendLine(t.Body);
+            }
+        }
+
+        if (buf.Length != 0)
+        {
+            // Only add blank line if we have any definitions at all.
+            buf.AppendLine();
+        }
+
+        if (builtins.Any())
+        {
+            padding = builtins.Max(x => x.Id.Length);
+            var categories = builtins.GroupBy(x => x.Category);
+            foreach (var c in categories)
+            {
+                buf.AppendLine(c.Key.Name);
+                buf.AppendLine("".PadLeft(80, '-'));
+                foreach(var t in c)
+                {
+                    buf.Append(t.Id.PadRight(padding));
+                    buf.Append(" : ");
+                    buf.AppendLine(t.Effect);
+                }
+
+                buf.AppendLine();
+            }
+        }
+
+        Console.WriteLine(buf.ToString());
+    }
+
+    public static void Helpdetail(Interpreter i)
+    {
+        new Validator("helpdetail")
+            .ListOnTop()
+            .Validate(i.Stack);
+
+        var ids = i.Pop<Node.List>();
+        var buf = new StringBuilder();
+
+        if (Node.IsEmpty(ids))
+        {
+            return;
+        }
+
+        var nodes = ids.Elements
+            .Where(x => x.Op == Operand.Symbol)
+            .Cast<Node.Symbol>()
+            .Where(x => i.ContainsKey(x.Name))
+            .ToList();
+
+        var padding = nodes.Max(x => x.Name.Length);
+        foreach (var node in nodes)
+        {
+            var entry = i[node.Name];
+            buf.AppendLine(string.Concat(node.Name.PadRight(padding), " : ", entry.Effect));
+            if (entry.Help.Length > 0)
+            {
+                foreach (var line in entry.Help)
+                {
+                    buf.AppendLine(line);
+                }
+            }
+
+            if (nodes.Count > 1)
+            {
+                buf.AppendLine();
+            }
+        }
+
+        Console.WriteLine(buf.ToString());
     }
 
     private static void BinaryLogic(
